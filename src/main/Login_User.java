@@ -1,21 +1,16 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
-import java.sql.ResultSet;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonUI;
+import lakban.Login_Admin;
 
 /*
  * @author Siregar
@@ -24,31 +19,30 @@ import javax.swing.plaf.basic.BasicButtonUI;
 public class Login_User  extends javax.swing.JFrame {
     
     // Variables declaration - do not modify                     
-    private javax.swing.JButton tombolDaftar;
+    private JLabel tombolDaftar;
     private JLabel tombolTutup,tombolRegistrasi;
-    private JLabel logo,usernameBg,passwordBg,usernamelabel,passwordlabel;
+    private JLabel logo,usernamelabel,passwordlabel;
     private javax.swing.JButton registrasi;
     private javax.swing.JPasswordField passwordForm;
     private javax.swing.JTextField usernameForm;
     private JButton tombolLogin;
-    private javax.swing.JPanel bg;
-    BasicButtonUI tombolContoh;
+    private JPanel bg,usernameBg,passwordBg;
     
     
     // End of variables declaration
     
     
     //Color Style
-    Color bg_color = new Color(255, 255, 255);
+    Color bg_color = new Color(255,255,255);
     Color fg_color = new Color(0, 22, 38);
     Font btn_font = new Font("Agency FB", 1, 15);
-    Font label_font = new Font("Consolas", 1, 15);
+    Font label_font = new Font("Century Gothic", 0, 15);
     GraphicsDevice ScreenDim = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
     int screenwidth = ScreenDim.getDisplayMode().getWidth();
     int screenheight = ScreenDim.getDisplayMode().getHeight();
     
     int squareDimens = ScreenDim.getDisplayMode().getHeight()*2/3;
-    public static Connection koneksi;
+    public static Connection koneksiLogin;
     
     
     
@@ -60,13 +54,13 @@ public class Login_User  extends javax.swing.JFrame {
         
         tombolTutup = new JLabel();
         tombolRegistrasi = new JLabel();
-        tombolDaftar = new JButton();
+        tombolDaftar = new JLabel();
         tombolLogin = new JButton();
         registrasi = new JButton();
         usernamelabel = new JLabel();
         passwordlabel = new JLabel();
-        usernameBg = new JLabel();
-        passwordBg = new JLabel();
+        usernameBg = new JPanel();
+        passwordBg = new JPanel();
         logo = new JLabel();
         usernameForm = new javax.swing.JTextField();
         passwordForm = new javax.swing.JPasswordField();
@@ -86,13 +80,15 @@ public class Login_User  extends javax.swing.JFrame {
         getContentPane().add(logo);
         logo.setBounds((squareDimens/2)-97,squareDimens/7,194,91);
         
+//Username Field Start
+
         usernamelabel.setFont(label_font);
         usernamelabel.setForeground(new Color(0, 100, 172));
-        usernamelabel.setText("Id pengguna");
-        usernamelabel.setBounds((squareDimens/2)-44, (squareDimens/2)-91, 88, 35);
+        usernamelabel.setText("Nomor Induk Pengguna");
+        usernamelabel.setBounds((squareDimens/2)-160, (squareDimens/2)-91, 200, 35);
         getContentPane().add(usernamelabel);
         
-        usernameForm.setBackground(new Color(115, 135, 155));
+        usernameForm.setBackground(new Color(115, 135, 155,0));
         usernameForm.setFont(new Font("Agency FB", 1, 20)); 
         usernameForm.setBorder(null);
         usernameForm.setCaretColor(new java.awt.Color(255, 255, 255));
@@ -101,15 +97,17 @@ public class Login_User  extends javax.swing.JFrame {
         usernameForm.setBounds(squareDimens/2-140, usernamelabel.getBounds().y+32, 280, 30);
         getContentPane().add(usernameForm);
         
-        usernameBg.setIcon(new ImageIcon(getClass().getResource("/image/loginform.png")));
+        usernameBg.setBackground(bg_color);
+        usernameBg.setBounds(squareDimens/2-160,usernameForm.getBounds().y+32,320,1); //ukuran berdasarkan form username, X -15 dan Y-8
         getContentPane().add(usernameBg);
-        usernameBg.setBounds(squareDimens/2-160,usernameForm.getBounds().y-2,320,34); //ukuran berdasarkan form username, X -15 dan Y-8
+        
+//Username Field End
         
         passwordlabel = new JLabel("<html><div style='text-align: center;'>" + "password" + "</div></html>");
         passwordlabel.setFont(label_font);
         passwordlabel.setForeground(usernamelabel.getForeground());
-        passwordlabel.setText("password");
-        passwordlabel.setBounds((squareDimens/2)-32, usernamelabel.getBounds().y+100,64, usernamelabel.getBounds().height);
+        passwordlabel.setText("Password");
+        passwordlabel.setBounds(usernamelabel.getBounds().x, usernamelabel.getBounds().y+100,100, usernamelabel.getBounds().height);
         getContentPane().add(passwordlabel);
         
         passwordForm.setBackground(usernameForm.getBackground());
@@ -120,25 +118,31 @@ public class Login_User  extends javax.swing.JFrame {
         getContentPane().add(passwordForm);
         passwordForm.setBounds(usernameForm.getBounds().x, passwordlabel.getBounds().y+32, 280,30);
         
-        passwordBg.setIcon(usernameBg.getIcon());
+        passwordBg.setBackground(bg_color);
+        passwordBg.setBounds(squareDimens/2-160,passwordForm.getBounds().y+32,320,1); //ukuran berdasarkan username, Y + 100
         getContentPane().add(passwordBg);
-        passwordBg.setBounds(squareDimens/2-160,passwordForm.getBounds().y-2,320,34); //ukuran berdasarkan username, Y + 100
         
         tombolLogin.setFont(new java.awt.Font("Agency FB", 1, 15));
         tombolLogin.setText("Login");
         tombolLogin.setBackground(bg_color);
         tombolLogin.setForeground(fg_color);
+        tombolLogin.setOpaque(false);
         tombolLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tombolLogin.addActionListener(this::loginButtonOnClick);
+        tombolLogin.setBounds((squareDimens/2)-(passwordBg.getBounds().width/2),  passwordBg.getBounds().y+50, passwordBg.getBounds().width, 30);
         getContentPane().add(tombolLogin);
-        tombolLogin.setBounds((squareDimens/2)-(passwordBg.getBounds().y/2),  passwordForm.getBounds().y+50, passwordBg.getBounds().width, 30);
         
         tombolDaftar.setFont(btn_font);
-        tombolDaftar.setText("Daftar");
+        tombolDaftar.setText("Daftar Akun");
         tombolDaftar.setBackground(bg_color);
-        tombolDaftar.setForeground(fg_color);
+        tombolDaftar.setForeground(new Color(0, 100, 172));
         tombolDaftar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tombolDaftar.addActionListener(this::tombolDaftarOnClick);
+        tombolDaftar.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tombolDaftarOnClick(evt);
+            }
+        });
         getContentPane().add(tombolDaftar);
         tombolDaftar.setBounds(15, squareDimens-45, 90, 30);
         
@@ -172,34 +176,40 @@ public class Login_User  extends javax.swing.JFrame {
     }                                            
 
     private void loginButtonOnClick(ActionEvent evt) {
+        
         try {
             String url ="jdbc:mysql://localhost/sikeb";
             String user="root";
             String pass="";
             Class.forName("com.mysql.jdbc.Driver");
             
-            koneksi =DriverManager.getConnection(url,user,pass);
-            ResultSet hasilUser = koneksi.createStatement().executeQuery("select * from pengguna where id_pengguna='"+usernameForm.getText()+"'and password='"+passwordForm.getText()+"' and status_aktif=1");
-            ResultSet hasilAdmin = koneksi.createStatement().executeQuery("select * from pengguna where id_pengguna='"+usernameForm.getText()+"'and password='"+passwordForm.getText()+"' and status_aktif=2");
-            if (hasilAdmin.next()) {
-                usernamelabel.setText(hasilAdmin.getString("id_pengguna"));
-                passwordlabel.setText(hasilAdmin.getString("password"));
-                System.out.println("Admin Masuk");
-                new Login_User().setVisible(true);
-            }else if(hasilUser.next()){
-                usernamelabel.setText(hasilAdmin.getString("id_pengguna"));
-                passwordlabel.setText(hasilAdmin.getString("password"));
-            System.out.println("User Masuk");
+            System.out.println("Login Database");
+            
+            koneksiLogin = DriverManager.getConnection(url,user,pass);
+            ResultSet userMasuk_RS  = koneksiLogin.createStatement().executeQuery("select * from pengguna where id_pengguna='"+usernameForm.getText()+"'and password='"+passwordForm.getText()+"' ");
+            
+            if (userMasuk_RS.next()) {
+                if("0".equals(userMasuk_RS.getString("status_user"))){
+                    System.out.println("user Yang Masuk adalah User yang Belum di verifikasi");
+                }if("1".equals(userMasuk_RS.getString("status_user"))){
+                    System.out.println("user Yang Masuk adalah : "+userMasuk_RS.getString("nama_pengguna"));
+                    new Beranda_User().setVisible(true);
+                    this.dispose();
+                }else{
+                    System.out.println("user Yang Masuk adalah : "+userMasuk_RS.getString("nama_pengguna"));
+                    new Beranda_Admin().setVisible(true);
+                    this.dispose();
+                }
             }
         } catch (ClassNotFoundException | SQLException e) {
-                usernamelabel.setText("Gagal Karena : "+e.getMessage());
+            System.err.println("koneksi gagal karena " +e.getMessage());
         }
     }
 
     private void jPasswordActionPerformed(java.awt.event.ActionEvent evt) {
     }                                         
 
-    private void tombolDaftarOnClick(java.awt.event.ActionEvent evt) {
+    private void tombolDaftarOnClick(MouseEvent evt) {
         new Form_Registrasi().setVisible(true);
             this.dispose();
     }                                      
@@ -218,10 +228,8 @@ public class Login_User  extends javax.swing.JFrame {
         }
         
         // Display form
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login_User().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login_User().setVisible(true);
         });
     }
 
