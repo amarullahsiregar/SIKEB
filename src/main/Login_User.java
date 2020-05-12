@@ -24,9 +24,9 @@ public class Login_User  extends javax.swing.JFrame {
     private JLabel logo,usernamelabel,passwordlabel;
     private javax.swing.JButton registrasi;
     private javax.swing.JPasswordField passwordForm;
-    private javax.swing.JTextField usernameForm;
+    private javax.swing.JTextField field_username;
     private JButton tombolLogin;
-    private JPanel bg,usernameBg,passwordBg;
+    private JPanel loginBG,usernameBg,passwordBg;
     
     
     // End of variables declaration
@@ -62,9 +62,9 @@ public class Login_User  extends javax.swing.JFrame {
         usernameBg = new JPanel();
         passwordBg = new JPanel();
         logo = new JLabel();
-        usernameForm = new javax.swing.JTextField();
+        field_username = new javax.swing.JTextField();
         passwordForm = new javax.swing.JPasswordField();
-        bg = new javax.swing.JPanel();
+        loginBG = new JPanel();
         
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -88,17 +88,17 @@ public class Login_User  extends javax.swing.JFrame {
         usernamelabel.setBounds((squareDimens/2)-160, (squareDimens/2)-91, 200, 35);
         getContentPane().add(usernamelabel);
         
-        usernameForm.setBackground(new Color(115, 135, 155,0));
-        usernameForm.setFont(new Font("Agency FB", 1, 20)); 
-        usernameForm.setBorder(null);
-        usernameForm.setCaretColor(new java.awt.Color(255, 255, 255));
-        usernameForm.setOpaque(false);
-        usernameForm.addActionListener(this::jTxtUsernameActionPerformed);
-        usernameForm.setBounds(squareDimens/2-140, usernamelabel.getBounds().y+32, 280, 30);
-        getContentPane().add(usernameForm);
+        field_username.setBackground(new Color(115, 135, 155,0));
+        field_username.setFont(new Font("Agency FB", 1, 20)); 
+        field_username.setBorder(null);
+        field_username.setCaretColor(new java.awt.Color(255, 255, 255));
+        field_username.setOpaque(false);
+        field_username.addActionListener(this::jTxtUsernameActionPerformed);
+        field_username.setBounds(squareDimens/2-140, usernamelabel.getBounds().y+32, 280, 30);
+        getContentPane().add(field_username);
         
         usernameBg.setBackground(bg_color);
-        usernameBg.setBounds(squareDimens/2-160,usernameForm.getBounds().y+32,320,1); //ukuran berdasarkan form username, X -15 dan Y-8
+        usernameBg.setBounds(squareDimens/2-160,field_username.getBounds().y+32,320,1); //ukuran berdasarkan form username, X -15 dan Y-8
         getContentPane().add(usernameBg);
         
 //Username Field End
@@ -110,13 +110,13 @@ public class Login_User  extends javax.swing.JFrame {
         passwordlabel.setBounds(usernamelabel.getBounds().x, usernamelabel.getBounds().y+100,100, usernamelabel.getBounds().height);
         getContentPane().add(passwordlabel);
         
-        passwordForm.setBackground(usernameForm.getBackground());
-        passwordForm.setFont(usernameForm.getFont());
+        passwordForm.setBackground(field_username.getBackground());
+        passwordForm.setFont(field_username.getFont());
         passwordForm.setBorder(null);
         passwordForm.setOpaque(false);
         passwordForm.addActionListener(this::jPasswordActionPerformed);
         getContentPane().add(passwordForm);
-        passwordForm.setBounds(usernameForm.getBounds().x, passwordlabel.getBounds().y+32, 280,30);
+        passwordForm.setBounds(field_username.getBounds().x, passwordlabel.getBounds().y+32, 280,30);
         
         passwordBg.setBackground(bg_color);
         passwordBg.setBounds(squareDimens/2-160,passwordForm.getBounds().y+32,320,1); //ukuran berdasarkan username, Y + 100
@@ -158,9 +158,9 @@ public class Login_User  extends javax.swing.JFrame {
         getContentPane().add(tombolTutup);
         tombolTutup.setBounds(squareDimens-40, 1, 39, 39);
         
-        bg.setBackground(new Color(0, 22, 38));
-        bg.setBounds(0, 0, squareDimens, squareDimens);
-        getContentPane().add(bg);
+        loginBG.setBackground(new Color(0, 22, 38));
+        loginBG.setBounds(0, 0, squareDimens, squareDimens);
+        getContentPane().add(loginBG);
 
 
         pack();
@@ -186,7 +186,7 @@ public class Login_User  extends javax.swing.JFrame {
             System.out.println("Login Database");
             
             koneksiLogin = DriverManager.getConnection(url,user,pass);
-            ResultSet userMasuk_RS  = koneksiLogin.createStatement().executeQuery("select * from pengguna where id_pengguna='"+usernameForm.getText()+"'and password='"+passwordForm.getText()+"' ");
+            ResultSet userMasuk_RS  = koneksiLogin.createStatement().executeQuery("select * from pengguna where id_pengguna='"+field_username.getText()+"'and password='"+passwordForm.getText()+"' ");
             
             if (userMasuk_RS.next()) {
                 if("0".equals(userMasuk_RS.getString("status_user"))){

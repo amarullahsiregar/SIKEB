@@ -4,26 +4,20 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 
 public class Beranda_User extends javax.swing.JFrame {
     
     private JPanel Background,panel_ListBarang;
-    private JLabel tbl_Tutup;
+//    private JLabel tbl_Tutup;
     private JLabel Judul_label;
     private JLabel status_menu;
-    private JButton Tombol_beranda,Tombol_terbaru,Tombol_Kehilanganku,Tombol_Kutemukan,Tambah_Barang;
+    private JButton Tombol_beranda,Tombol_terbaru,Tombol_Kehilanganku,Tombol_Kutemukan,Tambah_Barang,tbl_Tutup;
     daftarBarang.daftar daftar;
     public String user="Beranda";
    
@@ -40,7 +34,7 @@ public class Beranda_User extends javax.swing.JFrame {
 
     private void initComponents() {
 
-        tbl_Tutup = new JLabel();
+        tbl_Tutup = new JButton();
         Judul_label = new JLabel();
         status_menu = new JLabel();
         panel_ListBarang = new JPanel();
@@ -70,7 +64,7 @@ public class Beranda_User extends javax.swing.JFrame {
         });
         getContentPane().setLayout(null);
 
-/*
+
         tbl_Tutup.setIcon(new ImageIcon(getClass().getResource("/image/close.png"))); //tombol tombol_tutup
         tbl_Tutup.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
         tbl_Tutup.addMouseListener(new MouseAdapter() {
@@ -79,7 +73,7 @@ public class Beranda_User extends javax.swing.JFrame {
             }
         });
         getContentPane().add(tbl_Tutup);
-        tbl_Tutup.setBounds(1040, 0, 39, 39);                   */
+        tbl_Tutup.setBounds(1040, 0, 39, 39);
         
         //Judul dan Logo
         Judul_label.setIcon(new ImageIcon(getClass().getResource("/image/lakban_aplikasi_kecil.png")));
@@ -103,6 +97,7 @@ public class Beranda_User extends javax.swing.JFrame {
         //Tombol tombol
         Tombol_beranda.setForeground(new Color(0, 0, 255));
         Tombol_beranda.setText("Beranda");
+        
         Tombol_beranda.addActionListener(this::Tombol_berandaAction);
         Tombol_beranda.setBounds(170, panel_ListBarang.getBounds().y, 120, 30);
         getContentPane().add(Tombol_beranda);
