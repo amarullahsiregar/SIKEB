@@ -1,12 +1,9 @@
 package main;
 
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class Form_Registrasi extends javax.swing.JFrame {
@@ -45,7 +42,7 @@ public class Form_Registrasi extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         close.setForeground(new java.awt.Color(101, 150, 200));
-        close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lakban/image/close.png"))); // NOI18N
+        close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/close.png"))); // NOI18N
         close.setText("jLabel4");
         close.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         close.setMaximumSize(new java.awt.Dimension(39, 39));
@@ -71,11 +68,7 @@ public class Form_Registrasi extends javax.swing.JFrame {
         getContentPane().add(identitasform);
         identitasform.setBounds(120, 160, 410, 30);
 
-        passwordform.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordformActionPerformed(evt);
-            }
-        });
+        passwordform.addActionListener(this::passwordformActionPerformed);
         getContentPane().add(passwordform);
         passwordform.setBounds(120, 210, 410, 30);
 
@@ -89,11 +82,7 @@ public class Form_Registrasi extends javax.swing.JFrame {
         Daftar.setFont(new java.awt.Font("Agency FB", 1, 22)); // NOI18N
         Daftar.setForeground(new java.awt.Color(10, 20, 255));
         Daftar.setText("Daftar");
-        Daftar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DaftarActionPerformed(evt);
-            }
-        });
+        Daftar.addActionListener(this::DaftarActionPerformed);
         getContentPane().add(Daftar);
         Daftar.setBounds(390, 350, 80, 50);
 
@@ -110,11 +99,7 @@ public class Form_Registrasi extends javax.swing.JFrame {
         password.setBounds(10, 210, 100, 30);
 
         login.setText("Login");
-        login.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginActionPerformed(evt);
-            }
-        });
+        login.addActionListener(this::loginActionPerformed);
         getContentPane().add(login);
         login.setBounds(393, 500, 80, 23);
         getContentPane().add(kontakform);
@@ -145,7 +130,7 @@ public class Form_Registrasi extends javax.swing.JFrame {
 
         bgpanel.setBackground(new java.awt.Color(101, 200, 248));
         bgpanel.setForeground(new java.awt.Color(101, 200, 248));
-        bgpanel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lakban/image/bg.jpg"))); // NOI18N
+        bgpanel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/bg.jpg"))); // NOI18N
         bgpanel.setMaximumSize(new java.awt.Dimension(550, 550));
         bgpanel.setMinimumSize(new java.awt.Dimension(550, 550));
         getContentPane().add(bgpanel);
@@ -167,7 +152,7 @@ public class Form_Registrasi extends javax.swing.JFrame {
             try {
                 konek.createStatement().executeUpdate("insert into pengguna values"+"('"+identitasform.getText()+"','"+passwordform.getText()+"','"+namaform.getText()+"','"+kontakform.getText()+"','0')");
                 JOptionPane.showMessageDialog(rootPane, "selesai mendaftar ! \n tunggu konfirmasi dari admin ke kontak yang anda cantumkan ");
-            } catch (Exception e) {
+            } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(rootPane, "Masukkan Nomor Identitas dengan angka !");
             }
             
@@ -187,12 +172,8 @@ public class Form_Registrasi extends javax.swing.JFrame {
     }                                     
 
     private void passwordformActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        // TODO add your handling code here:
     }                                            
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         
         
@@ -203,20 +184,12 @@ public class Form_Registrasi extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Form_Registrasi().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Form_Registrasi().setVisible(true);
         });
     }
 
@@ -238,6 +211,6 @@ public class Form_Registrasi extends javax.swing.JFrame {
     private javax.swing.JLabel password;
     private javax.swing.JTextField passwordform;
     private javax.swing.JButton pilih;
-    // End of variables declaration                   
+    // End of variables declaration
 
 }

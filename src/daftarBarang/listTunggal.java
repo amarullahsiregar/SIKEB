@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import main.koneksidb;
+import main.KoneksiDB;
 
 public class listTunggal extends javax.swing.JPanel{
     public JLabel labelList;
@@ -85,7 +85,7 @@ public class listTunggal extends javax.swing.JPanel{
     
     public void load_list() throws SQLException{
         listTunggal list1[];
-        koneksidb a = new koneksidb();
+        KoneksiDB a = new KoneksiDB();
         ResultSet b = a.koneksi.createStatement().executeQuery("SELECT nomor,nama_barang,nama_lengkap FROM barang INNER JOIN pengguna WHERE barang.id_pengguna = pengguna.id_pengguna order by nomor desc");
         
     }
@@ -103,11 +103,11 @@ public class listTunggal extends javax.swing.JPanel{
         
         
         listTunggal list1[];
-        koneksidb a = new koneksidb();
+        KoneksiDB a = new KoneksiDB();
         ResultSet b = a.koneksi.createStatement().executeQuery("SELECT nomor,nama_barang,nama_pengguna FROM barang INNER JOIN pengguna WHERE barang.id_pengguna = pengguna.id_pengguna order by nomor desc");
         
         if(!b.next()){
-            new lakban.Login_User().setVisible(true);
+            new main.Login_User().setVisible(true);
         }
         list1 = new listTunggal[10];
         String hasil = b.getString(2);

@@ -3,7 +3,7 @@ package daftarBarang;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import main.koneksidb;
+import main.KoneksiDB;
 
 public class detail extends javax.swing.JFrame {
 
@@ -59,7 +59,7 @@ public class detail extends javax.swing.JFrame {
         );
 
         body.setBackground(new java.awt.Color(140, 140, 140));
-        koneksidb a = new koneksidb();
+        KoneksiDB a = new KoneksiDB();
         barangLabel.setText("Nama Barang");
         jLabel2.setText("Pengguna");
         jLabel3.setText("keterangan");

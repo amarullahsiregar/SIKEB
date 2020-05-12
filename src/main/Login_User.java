@@ -1,19 +1,21 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.border.Border;
+import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 /*
  * @author Siregar
@@ -22,139 +24,138 @@ import javax.swing.border.Border;
 public class Login_User  extends javax.swing.JFrame {
     
     // Variables declaration - do not modify                     
-    private javax.swing.JButton adminButton;
-    private JLabel logo,tutupButton,usernameBg,passwordBg,usernamelabel,passwordlabel;
+    private javax.swing.JButton tombolDaftar;
+    private JLabel tombolTutup,tombolRegistrasi;
+    private JLabel logo,usernameBg,passwordBg,usernamelabel,passwordlabel;
     private javax.swing.JButton registrasi;
     private javax.swing.JPasswordField passwordForm;
     private javax.swing.JTextField usernameForm;
-    private JButton loginButton;
+    private JButton tombolLogin;
     private javax.swing.JPanel bg;
-    String idPengguna;
+    BasicButtonUI tombolContoh;
+    
+    
     // End of variables declaration
     
+    
+    //Color Style
+    Color bg_color = new Color(255, 255, 255);
+    Color fg_color = new Color(0, 22, 38);
+    Font btn_font = new Font("Agency FB", 1, 15);
+    Font label_font = new Font("Consolas", 1, 15);
+    GraphicsDevice ScreenDim = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    int screenwidth = ScreenDim.getDisplayMode().getWidth();
+    int screenheight = ScreenDim.getDisplayMode().getHeight();
+    
+    int squareDimens = ScreenDim.getDisplayMode().getHeight()*2/3;
+    public static Connection koneksi;
+    
+    
+    
     public Login_User() {
-        initComponents();
+        initComponents();        
     }
 
     private void initComponents() {
         
-        tutupButton = new javax.swing.JLabel();
-        adminButton = new JButton();
-        loginButton = new JButton();
+        tombolTutup = new JLabel();
+        tombolRegistrasi = new JLabel();
+        tombolDaftar = new JButton();
+        tombolLogin = new JButton();
         registrasi = new JButton();
+        usernamelabel = new JLabel();
+        passwordlabel = new JLabel();
+        usernameBg = new JLabel();
+        passwordBg = new JLabel();
         logo = new JLabel();
-        usernamelabel = new javax.swing.JLabel();
-        passwordlabel = new javax.swing.JLabel();
         usernameForm = new javax.swing.JTextField();
         passwordForm = new javax.swing.JPasswordField();
-        usernameBg = new javax.swing.JLabel();
-        passwordBg = new javax.swing.JLabel();
         bg = new javax.swing.JPanel();
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(550, 450));
-        setSize(new java.awt.Dimension(550, 450));
+        setSize(new java.awt.Dimension(squareDimens, squareDimens));
+        setPreferredSize(new java.awt.Dimension(getSize().width, getSize().height));
         getContentPane().setLayout(null);
         
-        adminButton.setFont(new java.awt.Font("Agency FB", 1, 15));
-        adminButton.setText("Admin");
-        adminButton.setBackground(new Color(255, 255, 255));
-        adminButton.setForeground(new Color(0, 22, 38));
-        adminButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        adminButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminbuttonActionPerformed(evt);
-            }
-        });
-        getContentPane().add(adminButton);
-        adminButton.setBounds(450, 410, 90, 30);
         
-        loginButton.setFont(new java.awt.Font("Agency FB", 1, 15));
-        loginButton.setText("Login");
-        loginButton.setBackground(new Color(255, 255, 255));
-        loginButton.setForeground(new Color(0, 22, 38));
-        loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        loginButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginActionPerformed(evt);
-            }
-        });
-        getContentPane().add(loginButton);
-        loginButton.setBounds(230, 320, 90, 30);
-
-        registrasi.setIcon(new ImageIcon(getClass().getResource("/lakban/image/daftar.png"))); // NOI18N
-        registrasi.setOpaque(false);
-        registrasi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                daftarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(registrasi);
-        registrasi.setBounds(20, 400, 112, 40);
         
-        logo.setIcon(new ImageIcon(getClass().getResource("/lakban/image/lakban_logo.png")));
+        logo.setIcon(new ImageIcon(getClass().getResource("/image/logo_aplikasi.png")));
         logo.setOpaque(false);
         getContentPane().add(logo);
-        logo.setBounds(180,40,194,91);
+        logo.setBounds((squareDimens/2)-97,squareDimens/7,194,91);
         
-        usernamelabel.setFont(new Font("Letter Gothic Std", 1, 20));
+        usernamelabel.setFont(label_font);
         usernamelabel.setForeground(new Color(0, 100, 172));
         usernamelabel.setText("Id pengguna");
-        usernamelabel.setBounds(210, 120, 150, 35);
+        usernamelabel.setBounds((squareDimens/2)-44, (squareDimens/2)-91, 88, 35);
         getContentPane().add(usernamelabel);
         
-        passwordlabel.setFont(usernamelabel.getFont());
-        passwordlabel.setForeground(usernamelabel.getForeground());
-        passwordlabel.setText("password");
-        passwordlabel.setBounds( usernamelabel.getBounds().x+20, 220, usernamelabel.getBounds().width, usernamelabel.getBounds().height);
-        getContentPane().add(passwordlabel);
-        
         usernameForm.setBackground(new Color(115, 135, 155));
-        usernameForm.setFont(new Font("Agency FB", 1, 20)); // NOI18N
+        usernameForm.setFont(new Font("Agency FB", 1, 20)); 
         usernameForm.setBorder(null);
         usernameForm.setCaretColor(new java.awt.Color(255, 255, 255));
         usernameForm.setOpaque(false);
-        usernameForm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTxtUsernameActionPerformed(evt);
-            }
-        });
-        usernameForm.setBounds(130, 158, 280, 30);
+        usernameForm.addActionListener(this::jTxtUsernameActionPerformed);
+        usernameForm.setBounds(squareDimens/2-140, usernamelabel.getBounds().y+32, 280, 30);
         getContentPane().add(usernameForm);
         
-        usernameBg.setIcon(new ImageIcon(getClass().getResource("/lakban/image/loginform.png")));
+        usernameBg.setIcon(new ImageIcon(getClass().getResource("/image/loginform.png")));
         getContentPane().add(usernameBg);
-        usernameBg.setBounds(115,150,322,47);
+        usernameBg.setBounds(squareDimens/2-160,usernameForm.getBounds().y-2,320,34); //ukuran berdasarkan form username, X -15 dan Y-8
+        
+        passwordlabel = new JLabel("<html><div style='text-align: center;'>" + "password" + "</div></html>");
+        passwordlabel.setFont(label_font);
+        passwordlabel.setForeground(usernamelabel.getForeground());
+        passwordlabel.setText("password");
+        passwordlabel.setBounds((squareDimens/2)-32, usernamelabel.getBounds().y+100,64, usernamelabel.getBounds().height);
+        getContentPane().add(passwordlabel);
         
         passwordForm.setBackground(usernameForm.getBackground());
         passwordForm.setFont(usernameForm.getFont());
         passwordForm.setBorder(null);
         passwordForm.setOpaque(false);
-        passwordForm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordActionPerformed(evt);
-            }
-        });
+        passwordForm.addActionListener(this::jPasswordActionPerformed);
         getContentPane().add(passwordForm);
-        passwordForm.setBounds(usernameForm.getBounds().x, usernameForm.getBounds().y+100, usernameForm.getBounds().width, usernameForm.getBounds().height);
+        passwordForm.setBounds(usernameForm.getBounds().x, passwordlabel.getBounds().y+32, 280,30);
         
         passwordBg.setIcon(usernameBg.getIcon());
         getContentPane().add(passwordBg);
-        passwordBg.setBounds(115,250,322,47);
+        passwordBg.setBounds(squareDimens/2-160,passwordForm.getBounds().y-2,320,34); //ukuran berdasarkan username, Y + 100
         
-        tutupButton.setIcon(new ImageIcon(getClass().getResource("/lakban/image/close.png")));
-        tutupButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tutupButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        tombolLogin.setFont(new java.awt.Font("Agency FB", 1, 15));
+        tombolLogin.setText("Login");
+        tombolLogin.setBackground(bg_color);
+        tombolLogin.setForeground(fg_color);
+        tombolLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tombolLogin.addActionListener(this::loginButtonOnClick);
+        getContentPane().add(tombolLogin);
+        tombolLogin.setBounds((squareDimens/2)-(passwordBg.getBounds().y/2),  passwordForm.getBounds().y+50, passwordBg.getBounds().width, 30);
+        
+        tombolDaftar.setFont(btn_font);
+        tombolDaftar.setText("Daftar");
+        tombolDaftar.setBackground(bg_color);
+        tombolDaftar.setForeground(fg_color);
+        tombolDaftar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tombolDaftar.addActionListener(this::tombolDaftarOnClick);
+        getContentPane().add(tombolDaftar);
+        tombolDaftar.setBounds(15, squareDimens-45, 90, 30);
+        
+        
+        tombolTutup.setIcon(new ImageIcon(getClass().getResource("/image/close.png")));
+        tombolTutup.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tombolTutup.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 closeMouseClicked(evt);
             }
         });
-        getContentPane().add(tutupButton);
-        tutupButton.setBounds(510, 0, 39, 39);
+        getContentPane().add(tombolTutup);
+        tombolTutup.setBounds(squareDimens-40, 1, 39, 39);
         
         bg.setBackground(new Color(0, 22, 38));
-        bg.setBounds(0, 0, 550, 450);
+        bg.setBounds(0, 0, squareDimens, squareDimens);
         getContentPane().add(bg);
 
 
@@ -162,55 +163,43 @@ public class Login_User  extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void closeMouseClicked(java.awt.event.MouseEvent evt) {
+    private void closeMouseClicked(MouseEvent evt) {
         this.dispose();
     }                                  
 
 
-    private void jTxtUsernameActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jTxtUsernameActionPerformed(ActionEvent evt) {
     }                                            
 
-    private void loginActionPerformed(java.awt.event.ActionEvent evt) {                                      
-        try {           
-            koneksidb konek1 = new koneksidb();
-            koneksidb konekuser = new koneksidb();
-    //        Connection konek = DriverManager.getConnection("jdbc:mysql://localhost/lakban","root","");
-    //        Connection konekuser = DriverManager.getConnection("jdbc:mysql://localhost/lakban","root","");
-            ResultSet benar = konek1.koneksi.createStatement().executeQuery("select * from pengguna where id_pengguna='"+usernameForm.getText()+"'and password='"+String.valueOf(passwordForm.getText())+"' and aktif=1 ");
-            ResultSet usrbnr = konekuser.koneksi.createStatement().executeQuery("select * from pengguna where id_pengguna='"+usernameForm.getText()+"'");
-            if(benar.next()){
-                idPengguna = usernameForm.getText();
-                passwordForm.setText(null);
-                usernameForm.setText(null);
-                Beranda_User masuk;
-                masuk = new Beranda_User();
-                masuk.setuser(idPengguna);
-                masuk.setVisible(true);
-                this.dispose();
-            }else{
-                if(usrbnr.next()){
-                    JOptionPane.showMessageDialog(null, "Periksa kembali password anda !","Login gagal !",JOptionPane.ERROR_MESSAGE);
-                    
-                }else{
-                JOptionPane.showMessageDialog(rootPane, "Masukkan Username dan Password yang benar ! ");
-                    
-                }
+    private void loginButtonOnClick(ActionEvent evt) {
+        try {
+            String url ="jdbc:mysql://localhost/sikeb";
+            String user="root";
+            String pass="";
+            Class.forName("com.mysql.jdbc.Driver");
+            
+            koneksi =DriverManager.getConnection(url,user,pass);
+            ResultSet hasilUser = koneksi.createStatement().executeQuery("select * from pengguna where id_pengguna='"+usernameForm.getText()+"'and password='"+passwordForm.getText()+"' and status_aktif=1");
+            ResultSet hasilAdmin = koneksi.createStatement().executeQuery("select * from pengguna where id_pengguna='"+usernameForm.getText()+"'and password='"+passwordForm.getText()+"' and status_aktif=2");
+            if (hasilAdmin.next()) {
+                usernamelabel.setText(hasilAdmin.getString("id_pengguna"));
+                passwordlabel.setText(hasilAdmin.getString("password"));
+                System.out.println("Admin Masuk");
+                new Login_User().setVisible(true);
+            }else if(hasilUser.next()){
+                usernamelabel.setText(hasilAdmin.getString("id_pengguna"));
+                passwordlabel.setText(hasilAdmin.getString("password"));
+            System.out.println("User Masuk");
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Login_User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | SQLException e) {
+                usernamelabel.setText("Gagal Karena : "+e.getMessage());
         }
-    }                                     
-
-    private void adminbuttonActionPerformed(java.awt.event.ActionEvent evt) {
-        Login_Admin B = new Login_Admin();
-            B.setVisible(true);
-            this.dispose();
-    }                                           
+    }
 
     private void jPasswordActionPerformed(java.awt.event.ActionEvent evt) {
     }                                         
 
-    private void daftarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void tombolDaftarOnClick(java.awt.event.ActionEvent evt) {
         new Form_Registrasi().setVisible(true);
             this.dispose();
     }                                      
@@ -224,13 +213,7 @@ public class Login_User  extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login_User.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login_User.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login_User.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login_User.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         

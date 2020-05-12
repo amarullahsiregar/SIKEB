@@ -9,8 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import main.koneksidb;
-import daftarBarang.listTunggal;
+import main.KoneksiDB;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -27,10 +26,10 @@ public class daftar extends javax.swing.JPanel{
     
     public daftar(){
         initComponents();
-        String []judul={"Nama Barang","penemu","keterangan","Waktu","Status"};
-        model = new DefaultTableModel(judul,0);
-        tabel.setModel(model);
-        ambil_tabel();
+        //String []judul={"Nama Barang","penemu","keterangan","Waktu","Status"};
+        //model = new DefaultTableModel(judul,0);
+        //tabel.setModel(model);
+        //ambil_tabel();
     }
     
     
@@ -40,7 +39,7 @@ public class daftar extends javax.swing.JPanel{
             model.removeRow(0);
         }
         try {
-        koneksidb konekdb = new koneksidb();
+        KoneksiDB konekdb = new KoneksiDB();
             ResultSet rs = konekdb.koneksi.createStatement().executeQuery("SELECT nomor,nama_barang,nama_pengguna,keterangan, waktu,status_cari,status_temu FROM barang INNER JOIN pengguna WHERE barang.id_pengguna = pengguna.id_pengguna order by waktu desc");
             while(rs.next()){
                 String c,t,s;
@@ -63,7 +62,7 @@ public class daftar extends javax.swing.JPanel{
             model.removeRow(0);
         }
         try {
-        koneksidb konekdb = new koneksidb();
+        KoneksiDB konekdb = new KoneksiDB();
             ResultSet rs = konekdb.koneksi.createStatement().executeQuery("SELECT nomor,nama_barang,nama_pengguna,keterangan, waktu,status_cari,status_temu FROM barang INNER JOIN pengguna WHERE barang.id_pengguna = pengguna.id_pengguna ");
             while(rs.next()){
                 String c,t,s;
@@ -146,7 +145,7 @@ public class daftar extends javax.swing.JPanel{
     //Tombol Tombol
     private void KlilTabel(java.awt.event.MouseEvent evt) throws SQLException{
         int ke = tabel.getSelectedRow();
-        ResultSet rs = koneksidb.koneksi.createStatement().executeQuery("SELECT id_pengguna FROM barang INNER JOIN pengguna WHERE barang.id_pengguna = pengguna.id_pengguna order by nomor asc");
+        ResultSet rs = KoneksiDB.koneksi.createStatement().executeQuery("SELECT id_pengguna FROM barang INNER JOIN pengguna WHERE barang.id_pengguna = pengguna.id_pengguna order by nomor asc");
         new detail();
     }
     
