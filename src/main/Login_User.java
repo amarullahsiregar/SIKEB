@@ -23,7 +23,7 @@ public class Login_User  extends javax.swing.JFrame {
     private JLabel tombolTutup,tombolRegistrasi;
     private JLabel logo,usernamelabel,passwordlabel;
     private javax.swing.JButton registrasi;
-    private javax.swing.JPasswordField passwordForm;
+    private javax.swing.JPasswordField field_password;
     private javax.swing.JTextField field_username;
     private JButton tombolLogin;
     private JPanel loginBG,usernameBg,passwordBg;
@@ -35,8 +35,10 @@ public class Login_User  extends javax.swing.JFrame {
     //Color Style
     Color bg_color = new Color(255,255,255);
     Color fg_color = new Color(0, 22, 38);
+    Color field_fg_color = new Color(0, 22, 38);
     Font btn_font = new Font("Agency FB", 1, 15);
-    Font label_font = new Font("Century Gothic", 0, 15);
+    Font label_font = new Font("Century Gothic", 1, 15);
+    Font field_font = new Font("Century Gothic", 0, 20);
     GraphicsDevice ScreenDim = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
     int screenwidth = ScreenDim.getDisplayMode().getWidth();
     int screenheight = ScreenDim.getDisplayMode().getHeight();
@@ -63,7 +65,7 @@ public class Login_User  extends javax.swing.JFrame {
         passwordBg = new JPanel();
         logo = new JLabel();
         field_username = new javax.swing.JTextField();
-        passwordForm = new javax.swing.JPasswordField();
+        field_password = new javax.swing.JPasswordField();
         loginBG = new JPanel();
         
 
@@ -89,7 +91,8 @@ public class Login_User  extends javax.swing.JFrame {
         getContentPane().add(usernamelabel);
         
         field_username.setBackground(new Color(115, 135, 155,0));
-        field_username.setFont(new Font("Agency FB", 1, 20)); 
+        field_username.setForeground(new Color(115, 135, 155));
+        field_username.setFont(field_font); 
         field_username.setBorder(null);
         field_username.setCaretColor(new java.awt.Color(255, 255, 255));
         field_username.setOpaque(false);
@@ -110,16 +113,17 @@ public class Login_User  extends javax.swing.JFrame {
         passwordlabel.setBounds(usernamelabel.getBounds().x, usernamelabel.getBounds().y+100,100, usernamelabel.getBounds().height);
         getContentPane().add(passwordlabel);
         
-        passwordForm.setBackground(field_username.getBackground());
-        passwordForm.setFont(field_username.getFont());
-        passwordForm.setBorder(null);
-        passwordForm.setOpaque(false);
-        passwordForm.addActionListener(this::jPasswordActionPerformed);
-        getContentPane().add(passwordForm);
-        passwordForm.setBounds(field_username.getBounds().x, passwordlabel.getBounds().y+32, 280,30);
+        field_password.setBackground(field_username.getBackground());
+        field_password.setForeground(field_username.getForeground());
+        field_password.setFont(field_font);
+        field_password.setBorder(null);
+        field_password.setOpaque(false);
+        field_password.addActionListener(this::jPasswordActionPerformed);
+        getContentPane().add(field_password);
+        field_password.setBounds(field_username.getBounds().x, passwordlabel.getBounds().y+32, 280,30);
         
         passwordBg.setBackground(bg_color);
-        passwordBg.setBounds(squareDimens/2-160,passwordForm.getBounds().y+32,320,1); //ukuran berdasarkan username, Y + 100
+        passwordBg.setBounds(squareDimens/2-160,field_password.getBounds().y+32,320,1); //ukuran berdasarkan username, Y + 100
         getContentPane().add(passwordBg);
         
         tombolLogin.setFont(new java.awt.Font("Agency FB", 1, 15));
@@ -186,18 +190,18 @@ public class Login_User  extends javax.swing.JFrame {
             System.out.println("Login Database");
             
             koneksiLogin = DriverManager.getConnection(url,user,pass);
-            ResultSet userMasuk_RS  = koneksiLogin.createStatement().executeQuery("select * from pengguna where id_pengguna='"+field_username.getText()+"'and password='"+passwordForm.getText()+"' ");
+            ResultSet userMasuk_RS  = koneksiLogin.createStatement().executeQuery("select * from pengguna where id_pengguna='"+field_username.getText()+"'and password='"+field_password.getText()+"' ");
             
             if (userMasuk_RS.next()) {
                 if("0".equals(userMasuk_RS.getString("status_user"))){
                     System.out.println("user Yang Masuk adalah User yang Belum di verifikasi");
                 }if("1".equals(userMasuk_RS.getString("status_user"))){
                     System.out.println("user Yang Masuk adalah : "+userMasuk_RS.getString("nama_pengguna"));
-                    new Beranda_User().setVisible(true);
+                    new Beranda_User(userMasuk_RS.getString("nama_pengguna"),userMasuk_RS.getString("id_pengguna")).setVisible(true);
                     this.dispose();
                 }else{
                     System.out.println("user Yang Masuk adalah : "+userMasuk_RS.getString("nama_pengguna"));
-                    new Beranda_Admin().setVisible(true);
+                    new Beranda_Admin(userMasuk_RS.getString("nama_pengguna"),userMasuk_RS.getString("id_pengguna")).setVisible(true);
                     this.dispose();
                 }
             }

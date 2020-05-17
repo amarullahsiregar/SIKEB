@@ -1,14 +1,65 @@
 package main;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Enumeration;
+import javax.swing.*;
 
+/**
+ *
+ * @author Siregar
+ */
 public class Tambah_Barang extends javax.swing.JFrame {
+    
+    
+
+// Variables declaration Start
+    private JPanel bg_registrasi;
+    private JPanel bg_namaB;                     //BG Field
+    private JTextField  field_namaB;    //Field
+    private JTextArea  field_deskripsi;
+    private JButton tombol_daftar;                 //Tombol
+    private JLabel  tombol_tutup, label_statusBarang, label_kontak, tanya, judul, label_upload_foto, label_namaB, label_deskripsi;
+    private JRadioButton radio_hilang,radio_temuan;
+    private ButtonGroup grup_status;
+//Variables declaration End
+    
+    Color bg_color = new Color(255,255,255);
+    Color fg_color = new Color(0, 22, 38);
+    Color label_color = new Color(101, 200, 255);
+    Color field_BG = new Color(115, 135, 155,0);
+    Color field_FG = new Color(101, 200, 248);
+    
+    Font btn_font = new Font("Agency FB", 1, 15);
+    Font field_font = new Font("Consolas", 1, 15);
+    Font label_font = new Font("Consolas", 0, 14);
+    
+    GraphicsDevice ScreenDim = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    int screenwidth = ScreenDim.getDisplayMode().getWidth();
+    int screenheight = ScreenDim.getDisplayMode().getHeight();
+    int squareDimens = screenheight*3/4;
+    int panjang_field = 300;
+    int field_bound_x = (squareDimens/2)-150;
+    int area_bound_x = (squareDimens/2)-(screenheight/4);
+    int status_dipilih; 
+    String id_pengguna="14117135";
 
     byte[] person_image=null;
+    
     public Tambah_Barang() {
+        initComponents();
+    }
+    
+    public Tambah_Barang(String id_pengguna) {
+        this.id_pengguna=id_pengguna;
         initComponents();
     }
 
@@ -16,182 +67,196 @@ public class Tambah_Barang extends javax.swing.JFrame {
     
     private void initComponents() {
 
-        close = new javax.swing.JLabel();
-        judul = new javax.swing.JLabel();
-        namaform = new javax.swing.JTextField();
-        identitasform = new javax.swing.JTextField();
-        passwordform = new javax.swing.JTextField();
-        namaLabel = new javax.swing.JLabel();
-        Daftar = new javax.swing.JButton();
-        identitas = new javax.swing.JLabel();
-        password = new javax.swing.JLabel();
-        login = new javax.swing.JButton();
-        kontakform = new javax.swing.JTextField();
-        kontakLabel = new javax.swing.JLabel();
-        panelFoto = new javax.swing.JPanel();
-        juploadid = new javax.swing.JLabel();
-        pilih = new javax.swing.JButton();
-        tanya = new javax.swing.JLabel();
-        bgpanel = new javax.swing.JLabel();
+        tombol_tutup = new javax.swing.JLabel();       judul = new javax.swing.JLabel();
+        tanya = new javax.swing.JLabel();              label_upload_foto = new javax.swing.JLabel();
+        label_namaB = new javax.swing.JLabel();         label_kontak = new javax.swing.JLabel();
+        label_deskripsi = new javax.swing.JLabel();     label_statusBarang = new javax.swing.JLabel();
+        
+        field_namaB = new javax.swing.JTextField();
+        field_deskripsi = new JTextArea();
+        
+        radio_hilang = new javax.swing.JRadioButton();  radio_temuan = new javax.swing.JRadioButton();
+        grup_status = new ButtonGroup();
+        
+        tombol_daftar = new javax.swing.JButton();     
+        
+        bg_namaB = new JPanel();
+        bg_registrasi = new JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(550, 550));
-        setMinimumSize(new java.awt.Dimension(550, 550));
+        setMinimumSize(new java.awt.Dimension(squareDimens, squareDimens));
         setUndecorated(true);
         getContentPane().setLayout(null);
-
-        close.setForeground(new java.awt.Color(101, 150, 200));
-        close.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lakban/image/close.png"))); // NOI18N
-        close.setText("jLabel4");
-        close.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        close.setMaximumSize(new java.awt.Dimension(39, 39));
-        close.setMinimumSize(new java.awt.Dimension(39, 39));
-        close.setPreferredSize(new java.awt.Dimension(39, 39));
-        close.addMouseListener(new java.awt.event.MouseAdapter() {
+        
+// Tombol Close
+        tombol_tutup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/close.png")));
+        tombol_tutup.setText("jLabel4");
+        tombol_tutup.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+        tombol_tutup.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 closeMouseClicked(evt);
             }
         });
-        getContentPane().add(close);
-        close.setBounds(511, 0, 39, 39);
-
-        judul.setFont(new java.awt.Font("Agency FB", 1, 35)); // NOI18N
+        getContentPane().add(tombol_tutup);
+        tombol_tutup.setBounds(getMinimumSize().width-39, 0, 39, 39);
+ 
+//Judul
+        judul.setFont(new java.awt.Font("Consolas", 1, 15));
         judul.setForeground(new java.awt.Color(255, 255, 255));
         judul.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        judul.setLabelFor(bgpanel);
-        judul.setText("Tambah Barang");
+        judul.setLabelFor(bg_registrasi);
+        judul.setText("Tambah Barang +");
         getContentPane().add(judul);
         judul.setBounds(180, 30, 200, 60);
-        getContentPane().add(namaform);
-        namaform.setBounds(120, 110, 410, 30);
-        getContentPane().add(identitasform);
-        identitasform.setBounds(120, 160, 410, 30);
+        
+// Field Nama Barang Start
+        label_namaB.setFont(label_font);
+        label_namaB.setForeground(label_color);
+        label_namaB.setText("Nama Barang");
+        getContentPane().add(label_namaB);
+        label_namaB.setBounds(field_bound_x, 113, panjang_field, 30);                                                 //Tinggi 30
+        
+        field_namaB.setBackground(field_BG);
+        field_namaB.setForeground(field_FG);
+        field_namaB.setFont(field_font);
+        field_namaB.setBorder(null);
+        field_namaB.setBounds(field_bound_x, label_namaB.getBounds().y+20, panjang_field, 30);   //Tinggi 30
+        getContentPane().add(field_namaB);
+        
+        bg_namaB.setBackground(bg_color);
+        bg_namaB.setBounds(field_namaB.getBounds().x,field_namaB.getBounds().y+25,panjang_field,1);          //Tinggi 1
+        getContentPane().add(bg_namaB);
+// Field Nama End
 
-        passwordform.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordformActionPerformed(evt);
-            }
-        });
-        getContentPane().add(passwordform);
-        passwordform.setBounds(120, 210, 410, 30);
+// Field Status Barang Start
+        label_statusBarang.setFont(label_font);
+        label_statusBarang.setForeground(label_color);
+        label_statusBarang.setText("Status Barang");
+        getContentPane().add(label_statusBarang);
+        label_statusBarang.setBounds(field_bound_x, label_namaB.getBounds().y+61, panjang_field, 30);
 
-        namaLabel.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
-        namaLabel.setForeground(new java.awt.Color(101, 200, 248));
-        namaLabel.setText("Nama Barang :");
-        getContentPane().add(namaLabel);
-        namaLabel.setBounds(11, 113, 100, 30);
+        radio_hilang.setBackground(field_BG);
+        radio_hilang.setForeground(field_FG);
+        radio_hilang.setFont(field_font);
+        radio_hilang.setText("Hilang");
+        radio_hilang.setBorder(null);
+        radio_hilang.setBounds(field_bound_x, label_statusBarang.getBounds().y+20, panjang_field/2, 30); //Tinggi 30
+        getContentPane().add(radio_hilang);
 
-        Daftar.setBackground(new java.awt.Color(100, 100, 100));
-        Daftar.setFont(new java.awt.Font("Agency FB", 1, 22)); // NOI18N
-        Daftar.setForeground(new java.awt.Color(10, 20, 255));
-        Daftar.setText("Daftar");
-        Daftar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DaftarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(Daftar);
-        Daftar.setBounds(390, 350, 80, 50);
+        radio_temuan.setBackground(field_BG);
+        radio_temuan.setForeground(field_FG);
+        radio_temuan.setFont(field_font);
+        radio_temuan.setText("Temuan");
+        radio_temuan.setBorder(null);
+        radio_temuan.setBounds(field_bound_x+(panjang_field/2), label_statusBarang.getBounds().y+20, panjang_field/2, 30); //Tinggi 30
+        getContentPane().add(radio_temuan);
+        
+        grup_status.add(radio_hilang);
+        grup_status.add(radio_temuan);
+        getContentPane().setVisible(true);
+        
+        
+// Field Status Barang End
 
-        identitas.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
-        identitas.setForeground(new java.awt.Color(101, 200, 255));
-        identitas.setText("No. Identitas     :");
-        getContentPane().add(identitas);
-        identitas.setBounds(11, 160, 100, 30);
+// Field Deskripsi
+        label_deskripsi.setFont(label_font);
+        label_deskripsi.setForeground(label_color);
+        label_deskripsi.setText("Deskripsi");
+        getContentPane().add(label_deskripsi);
+        label_deskripsi.setBounds(field_bound_x, label_statusBarang.getBounds().y+50, panjang_field, 30);
 
-        password.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
-        password.setForeground(new java.awt.Color(101, 200, 255));
-        password.setText("Password       :");
-        getContentPane().add(password);
-        password.setBounds(10, 210, 100, 30);
+        field_deskripsi.setBackground(field_BG);
+        field_deskripsi.setForeground(field_FG);
+        field_deskripsi.setFont(field_font);
+        field_deskripsi.setLineWrap(true);
+        field_deskripsi.setWrapStyleWord(true);
+        field_deskripsi.setRows(5);
+        field_deskripsi.setBorder(BorderFactory.createLineBorder(Color.white));
+        field_deskripsi.setBounds(area_bound_x, label_deskripsi.getBounds().y+30, screenheight/2, 100);
+        getContentPane().add(field_deskripsi);
+// Field Deskripsi
 
-        login.setText("Login");
-        login.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginActionPerformed(evt);
-            }
-        });
-        getContentPane().add(login);
-        login.setBounds(393, 500, 80, 23);
-        getContentPane().add(kontakform);
-        kontakform.setBounds(120, 260, 410, 30);
-
-        kontakLabel.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
-        kontakLabel.setForeground(new java.awt.Color(101, 200, 255));
-        kontakLabel.setText("Kontak            :");
-        getContentPane().add(kontakLabel);
-        kontakLabel.setBounds(10, 260, 100, 30);
-        getContentPane().add(panelFoto);
-        panelFoto.setBounds(140, 310, 190, 130);
-
-        juploadid.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
-        juploadid.setForeground(new java.awt.Color(101, 200, 255));
-        juploadid.setText("Upload Foto Barang");
-        getContentPane().add(juploadid);
-        juploadid.setBounds(10, 310, 130, 20);
-
-        pilih.setText("Pilih");
-        getContentPane().add(pilih);
-        pilih.setBounds(140, 450, 73, 23);
-
-        tanya.setForeground(new java.awt.Color(101, 200, 255));
-        tanya.setText("sudah punya akun ?");
-        getContentPane().add(tanya);
-        tanya.setBounds(280, 500, 120, 20);
-
-        bgpanel.setBackground(new java.awt.Color(101, 200, 248));
-        bgpanel.setForeground(new java.awt.Color(101, 200, 248));
-        bgpanel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lakban/image/bg.jpg"))); // NOI18N
-        bgpanel.setMaximumSize(new java.awt.Dimension(550, 550));
-        bgpanel.setMinimumSize(new java.awt.Dimension(550, 550));
-        getContentPane().add(bgpanel);
-        bgpanel.setBounds(0, 0, 550, 550);
-
+        tombol_daftar.setBackground(new java.awt.Color(100, 100, 100));
+        tombol_daftar.setFont(label_font);
+        tombol_daftar.setForeground(new java.awt.Color(10, 20, 255));
+        tombol_daftar.setText("Tambah Barang");
+        tombol_daftar.addActionListener(this::DaftarActionPerformed);
+        getContentPane().add(tombol_daftar);
+        tombol_daftar.setBounds(label_namaB.getBounds().x, 400, label_namaB.getBounds().width, 30);
+        
+// Background 
+        bg_registrasi.setBounds(0, 0,getMinimumSize().width, getMinimumSize().height);
+        bg_registrasi.setBackground(new Color(0, 22, 50));
+        getContentPane().add(bg_registrasi);
+// Background 
         pack();
         setLocationRelativeTo(null);
     }                       
 
+    private void pilihButtonOnClick(ActionEvent evt) {
+        Enumeration<AbstractButton> allRadioButton=grup_status.getElements();
+        while(allRadioButton.hasMoreElements())  
+        {  
+           JRadioButton radio_dipilih=(JRadioButton)allRadioButton.nextElement();  
+           if(radio_dipilih.isSelected())  
+           {  
+            JOptionPane.showMessageDialog(null,"You select : "+radio_dipilih.getText());  
+           }  
+        }
+    }
+
+    private void apaYangDipilih() {
+        Enumeration<AbstractButton> allRadioButton=grup_status.getElements();
+        while(allRadioButton.hasMoreElements())  
+        {  
+           JRadioButton radio_dipilih=(JRadioButton)allRadioButton.nextElement();  
+           if(radio_dipilih.isSelected())  
+           {
+               if("Temuan".equals(radio_dipilih.getText())){
+                this.status_dipilih=0;
+               }else{
+                this.status_dipilih=1;
+               }
+               
+           }  
+        }
+    }
     private void closeMouseClicked(java.awt.event.MouseEvent evt) {                                   
         // TODO add your handling code here:
         this.dispose();
     }                                  
 
-    private void DaftarActionPerformed(java.awt.event.ActionEvent evt) {                                       
+    private void DaftarActionPerformed(java.awt.event.ActionEvent evt) {
+        apaYangDipilih();
+        DateTimeFormatter format_tanggal= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL);
+        LocalDate tanggal_hari_ini=LocalDate.now();
         try {
             // TODO add your handling code here:
-            Connection konek = DriverManager.getConnection("jdbc:mysql://localhost/lakban","root","");
+            Connection konek = DriverManager.getConnection("jdbc:mysql://localhost/sikeb","root","");
+            ResultSet jlh = konek.createStatement().executeQuery("SELECT COUNT(nomor) FROM barang");
             try {
-                konek.createStatement().executeUpdate("insert into pengguna values"+"('"+identitasform.getText()+"','"+passwordform.getText()+"','"+namaform.getText()+"','"+kontakform.getText()+"','0')");
-                JOptionPane.showMessageDialog(rootPane, "selesai mendaftar ! \n tunggu konfirmasi dari admin ke kontak yang anda cantumkan ");
-            } catch (Exception e) {
+                int jumlah = 0;
+                if (jlh.next()) {
+                    jumlah=jlh.getInt("COUNT(nomor)");
+                    jumlah++;
+                }
+                konek.createStatement().executeUpdate("insert into barang values ("+String.valueOf(jumlah)+",'"+field_namaB.getText()+"',"+id_pengguna+", NOW(),"+status_dipilih+",'"+field_deskripsi.getText()+"')");
+                JOptionPane.showMessageDialog(rootPane, "Barang Telah Ditambahkan ! \n ");
+                
+                this.dispose();
+            } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(rootPane, "Masukkan Nomor Identitas dengan angka !");
             }
-            
-            //load_table();
-            //kosong();
             
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Masalah pada database !");
         }
     }                                      
 
-    private void loginActionPerformed(java.awt.event.ActionEvent evt) {                                      
-        // TODO add your handling code here:
-        Login_User A = new Login_User();
-        A.setVisible(true);
-        this.dispose();
-    }                                     
-
-    private void passwordformActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        // TODO add your handling code here:
-    }                                            
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        
-        
+                
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -199,41 +264,12 @@ public class Tambah_Barang extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Tambah_Barang().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Tambah_Barang().setVisible(true);
         });
     }
-
-    // Variables declaration - do not modify                     
-    private javax.swing.JButton Daftar;
-    private javax.swing.JLabel bgpanel;
-    private javax.swing.JLabel close;
-    private javax.swing.JLabel identitas;
-    private javax.swing.JTextField identitasform;
-    private javax.swing.JLabel kontakLabel;
-    private javax.swing.JLabel tanya;
-    private javax.swing.JPanel panelFoto;
-    private javax.swing.JLabel judul;
-    private javax.swing.JLabel juploadid;
-    private javax.swing.JTextField kontakform;
-    private javax.swing.JButton login;
-    private javax.swing.JLabel namaLabel;
-    private javax.swing.JTextField namaform;
-    private javax.swing.JLabel password;
-    private javax.swing.JTextField passwordform;
-    private javax.swing.JButton pilih;
-    // End of variables declaration                   
-
 }
