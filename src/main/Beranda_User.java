@@ -11,13 +11,12 @@ import javax.swing.*;
 
 public class Beranda_User extends javax.swing.JFrame {
     
-    private JPanel Background,panel_ListBarang;
-    
-//    private JLabel tbl_Tutup;
-    private JLabel Judul_label;
-    private JLabel status_menu;
-    private JPanel Tombol_logout, Tombol_Kehilanganku,Tombol_Kutemukan,Tombol_Tambah;
+    private JLabel Judul_label, status_menu;
     private JLabel label_detail, label_user, label_Kehilanganku,label_Kutemukan,label_Tambah_Barang,tbl_Tutup;
+    private JPanel Tombol_logout, Tombol_Kehilanganku,Tombol_Kutemukan,Tombol_Tambah,panel_ListBarang;
+    private JPanel Background;
+    
+    
     public String user="";
     public String id_pengguna="0";
     public String query="SELECT * FROM barang INNER JOIN pengguna WHERE barang.id_pengguna = pengguna.id_pengguna order by waktu desc";
@@ -44,14 +43,16 @@ public class Beranda_User extends javax.swing.JFrame {
         tbl_Tutup = new JLabel();
         Judul_label = new JLabel();
         status_menu = new JLabel();
-        panel_ListBarang = new JPanel();
         Tombol_logout = new JPanel();          label_detail = new JLabel();
         label_user = new JLabel();
+        
         Tombol_Kehilanganku = new JPanel();     label_Kehilanganku = new JLabel();
         Tombol_Kutemukan = new JPanel();        label_Kutemukan = new JLabel();
         Tombol_Tambah = new JPanel();           label_Tambah_Barang = new JLabel();
 
+        panel_ListBarang = new JPanel();
         Background = new JPanel();
+        
         GraphicsDevice ScreenDim = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int screenwidth = ScreenDim.getDisplayMode().getWidth();
         int screenheight = ScreenDim.getDisplayMode().getHeight();
@@ -67,7 +68,7 @@ public class Beranda_User extends javax.swing.JFrame {
         setUndecorated(true);
         setBackground(Color.yellow);
         setPreferredSize(getMaximumSize());
-//        setSize(new java.awt.Dimension(1080, 720));
+        setSize(new java.awt.Dimension(1080, 720));
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
