@@ -17,9 +17,9 @@ public class Form_Registrasi extends javax.swing.JFrame {
 
 // Variables declaration Start
     private javax.swing.JPanel bg_registrasi, panelFoto;
-    private javax.swing.JPanel bg_no_induk, bg_nama, bg_password,bg_kontak;                     //BG Field
-    private javax.swing.JTextField field_no_induk, field_nama, field_password, field_kontak;    //Field
-    private javax.swing.JButton tombol_daftar, tombol_pilih_foto;                 //Tombol
+    private javax.swing.JPanel bg_no_induk, bg_nama, bg_password,bg_kontak;
+    private javax.swing.JTextField field_no_induk, field_nama, field_password, field_kontak;
+    private javax.swing.JButton tombol_daftar, tombol_pilih_foto;
     private javax.swing.JLabel tombol_login, tombol_close, label_nomor_induk, label_kontak, tanya, judul, label_uploas_foto, label_nama, label_password;
 //Variables declaration End
     
@@ -41,6 +41,7 @@ public class Form_Registrasi extends javax.swing.JFrame {
     int field_bound_x = (squareDimens/2)-150;
 
     byte[] person_image=null;
+    
     public Form_Registrasi() {
         initComponents();
     }
@@ -82,7 +83,7 @@ public class Form_Registrasi extends javax.swing.JFrame {
         tombol_close.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                closeMouseClicked(evt);
+                System.exit(0);
             }
         });
         getContentPane().add(tombol_close);
@@ -229,20 +230,16 @@ public class Form_Registrasi extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }                       
 
-    private void closeMouseClicked(java.awt.event.MouseEvent evt) {                                   
-        // TODO add your handling code here:
-        this.dispose();
-    }                                  
 
     private void DaftarActionPerformed(java.awt.event.ActionEvent evt) {                                       
         try {
             // TODO add your handling code here:
-            Connection konek = DriverManager.getConnection("jdbc:mysql://localhost/lakban","root","");
+            Connection konek = DriverManager.getConnection("jdbc:mysql://localhost/sikeb","root","");
             try {
-                konek.createStatement().executeUpdate("insert into pengguna values"+"('"+field_no_induk.getText()+"','"+field_password.getText()+"','"+field_nama.getText()+"','"+field_kontak.getText()+"','0')");
+                konek.createStatement().executeUpdate("insert into pengguna values("+field_no_induk.getText()+",'"+field_password.getText()+"','"+field_nama.getText()+"','"+field_kontak.getText()+"','0')");
                 JOptionPane.showMessageDialog(rootPane, "selesai mendaftar ! \n tunggu konfirmasi dari admin ke kontak yang anda cantumkan ");
             } catch (HeadlessException | SQLException e) {
-                JOptionPane.showMessageDialog(rootPane, "Masukkan Nomor Identitas dengan angka !");
+                JOptionPane.showMessageDialog(rootPane, "Masukkan Nomor Identitas dengan angka ! \n Pastikan Anda belum pernah Mendaftar sebelumnya");
             }
             
             //load_table();
@@ -255,27 +252,9 @@ public class Form_Registrasi extends javax.swing.JFrame {
 
     private void tombolLoginOnClick(java.awt.event.MouseEvent evt) {                                      
         // TODO add your handling code here:
-        Login_User A = new Login_User();
+        Login A = new Login();
         A.setVisible(true);
         this.dispose();
-    }                                     
-
-
-    public static void main(String args[]) {
-                
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-
-        java.awt.EventQueue.invokeLater(() -> {
-            new Form_Registrasi().setVisible(true);
-        });
     }
+    
 }

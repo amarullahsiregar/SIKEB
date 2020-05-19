@@ -1,15 +1,11 @@
 package main;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Enumeration;
 import javax.swing.*;
 
@@ -26,8 +22,8 @@ public class Tambah_Barang extends javax.swing.JFrame {
     private JPanel bg_namaB;                     //BG Field
     private JTextField  field_namaB;    //Field
     private JTextArea  field_deskripsi;
-    private JButton tombol_daftar;                 //Tombol
-    private JLabel  tombol_tutup, label_statusBarang, label_kontak, tanya, judul, label_upload_foto, label_namaB, label_deskripsi;
+    private JButton tombol_tambah;                 //Tombol
+    private JLabel  tombol_tutup, label_statusBarang, judul, label_namaB, label_deskripsi;
     private JRadioButton radio_hilang,radio_temuan;
     private ButtonGroup grup_status;
 //Variables declaration End
@@ -68,8 +64,7 @@ public class Tambah_Barang extends javax.swing.JFrame {
     private void initComponents() {
 
         tombol_tutup = new javax.swing.JLabel();       judul = new javax.swing.JLabel();
-        tanya = new javax.swing.JLabel();              label_upload_foto = new javax.swing.JLabel();
-        label_namaB = new javax.swing.JLabel();         label_kontak = new javax.swing.JLabel();
+        label_namaB = new javax.swing.JLabel();
         label_deskripsi = new javax.swing.JLabel();     label_statusBarang = new javax.swing.JLabel();
         
         field_namaB = new javax.swing.JTextField();
@@ -78,7 +73,7 @@ public class Tambah_Barang extends javax.swing.JFrame {
         radio_hilang = new javax.swing.JRadioButton();  radio_temuan = new javax.swing.JRadioButton();
         grup_status = new ButtonGroup();
         
-        tombol_daftar = new javax.swing.JButton();     
+        tombol_tambah = new javax.swing.JButton();     
         
         bg_namaB = new JPanel();
         bg_registrasi = new JPanel();
@@ -96,7 +91,7 @@ public class Tambah_Barang extends javax.swing.JFrame {
         tombol_tutup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                closeMouseClicked(evt);
+                System.exit(0);
             }
         });
         getContentPane().add(tombol_tutup);
@@ -178,13 +173,13 @@ public class Tambah_Barang extends javax.swing.JFrame {
         getContentPane().add(field_deskripsi);
 // Field Deskripsi
 
-        tombol_daftar.setBackground(new java.awt.Color(100, 100, 100));
-        tombol_daftar.setFont(label_font);
-        tombol_daftar.setForeground(new java.awt.Color(10, 20, 255));
-        tombol_daftar.setText("Tambah Barang");
-        tombol_daftar.addActionListener(this::DaftarActionPerformed);
-        getContentPane().add(tombol_daftar);
-        tombol_daftar.setBounds(label_namaB.getBounds().x, 400, label_namaB.getBounds().width, 30);
+        tombol_tambah.setBackground(new java.awt.Color(100, 100, 100));
+        tombol_tambah.setFont(label_font);
+        tombol_tambah.setForeground(new java.awt.Color(10, 20, 255));
+        tombol_tambah.setText("Tambah Barang");
+        tombol_tambah.addActionListener(this::DaftarActionPerformed);
+        getContentPane().add(tombol_tambah);
+        tombol_tambah.setBounds(label_namaB.getBounds().x, 400, label_namaB.getBounds().width, 30);
         
 // Background 
         bg_registrasi.setBounds(0, 0,getMinimumSize().width, getMinimumSize().height);
@@ -194,18 +189,6 @@ public class Tambah_Barang extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }                       
-
-    private void pilihButtonOnClick(ActionEvent evt) {
-        Enumeration<AbstractButton> allRadioButton=grup_status.getElements();
-        while(allRadioButton.hasMoreElements())  
-        {  
-           JRadioButton radio_dipilih=(JRadioButton)allRadioButton.nextElement();  
-           if(radio_dipilih.isSelected())  
-           {  
-            JOptionPane.showMessageDialog(null,"You select : "+radio_dipilih.getText());  
-           }  
-        }
-    }
 
     private void apaYangDipilih() {
         Enumeration<AbstractButton> allRadioButton=grup_status.getElements();
@@ -223,17 +206,11 @@ public class Tambah_Barang extends javax.swing.JFrame {
            }  
         }
     }
-    private void closeMouseClicked(java.awt.event.MouseEvent evt) {                                   
-        // TODO add your handling code here:
-        this.dispose();
-    }                                  
 
     private void DaftarActionPerformed(java.awt.event.ActionEvent evt) {
         apaYangDipilih();
-        DateTimeFormatter format_tanggal= DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL);
-        LocalDate tanggal_hari_ini=LocalDate.now();
         try {
-            // TODO add your handling code here:
+            
             Connection konek = DriverManager.getConnection("jdbc:mysql://localhost/sikeb","root","");
             ResultSet jlh = konek.createStatement().executeQuery("SELECT COUNT(nomor) FROM barang");
             try {
@@ -242,12 +219,11 @@ public class Tambah_Barang extends javax.swing.JFrame {
                     jumlah=jlh.getInt("COUNT(nomor)");
                     jumlah++;
                 }
-                konek.createStatement().executeUpdate("insert into barang values ("+String.valueOf(jumlah)+",'"+field_namaB.getText()+"',"+id_pengguna+", NOW(),"+status_dipilih+",'"+field_deskripsi.getText()+"')");
+                konek.createStatement().executeUpdate("insert into barang values("+jumlah+",'"+field_namaB.getText()+"',"+id_pengguna+", NOW(),"+status_dipilih+",'"+field_deskripsi.getText()+"')");
                 JOptionPane.showMessageDialog(rootPane, "Barang Telah Ditambahkan ! \n ");
-                
                 this.dispose();
             } catch (HeadlessException | SQLException e) {
-                JOptionPane.showMessageDialog(rootPane, "Masukkan Nomor Identitas dengan angka !");
+                JOptionPane.showMessageDialog(rootPane, "Terjadi Kesalahan \n"+e.getMessage() );
             }
             
         } catch (SQLException ex) {
@@ -255,8 +231,9 @@ public class Tambah_Barang extends javax.swing.JFrame {
         }
     }                                      
 
+    
+    
     public static void main(String args[]) {
-                
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -267,7 +244,8 @@ public class Tambah_Barang extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Tambah_Barang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-
+        
+        // Display form
         java.awt.EventQueue.invokeLater(() -> {
             new Tambah_Barang().setVisible(true);
         });

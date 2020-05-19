@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Beranda_User extends javax.swing.JFrame {
     
     private JLabel Judul_label, status_menu;
-    private JLabel label_detail, label_user, label_Kehilanganku,label_Kutemukan,label_Tambah_Barang,tbl_Tutup;
+    private JLabel label_detail, label_user, label_Kehilanganku,label_Kutemukan,label_Tambah_Barang,tombol_Tutup;
     private JPanel Tombol_logout, Tombol_Kehilanganku,Tombol_Kutemukan,Tombol_Tambah,panel_ListBarang;
     private JPanel Background;
     
@@ -26,12 +26,6 @@ public class Beranda_User extends javax.swing.JFrame {
         initComponents();
     }
     
-    public Beranda_User(String user) {
-        this.user=user;
-        initComponents();
-    }
-    
-    
     public Beranda_User(String user,String id_prngguna) {
         this.user=user;
         this.id_pengguna=id_prngguna;
@@ -40,7 +34,7 @@ public class Beranda_User extends javax.swing.JFrame {
     
     private void initComponents() {
 
-        tbl_Tutup = new JLabel();
+        tombol_Tutup = new JLabel();
         Judul_label = new JLabel();
         status_menu = new JLabel();
         Tombol_logout = new JPanel();          label_detail = new JLabel();
@@ -68,7 +62,6 @@ public class Beranda_User extends javax.swing.JFrame {
         setUndecorated(true);
         setBackground(Color.yellow);
         setPreferredSize(getMaximumSize());
-        setSize(new java.awt.Dimension(1080, 720));
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -76,14 +69,13 @@ public class Beranda_User extends javax.swing.JFrame {
             }
         });
         getContentPane().setLayout(null);
-
-
-        tbl_Tutup.setIcon(new ImageIcon(getClass().getResource("/image/close.png"))); //tombol tombol_tutup
-        tbl_Tutup.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        getContentPane().add(tbl_Tutup);
-        tbl_Tutup.setBounds(1040, 0, 39, 39);
         
-        //Judul dan Logo
+        tombol_Tutup.setIcon(new ImageIcon(getClass().getResource("/image/close.png")));
+        tombol_Tutup.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(tombol_Tutup);
+        tombol_Tutup.setBounds(1040, 0, 39, 39);
+        
+//Judul dan Logo
         Judul_label.setIcon(new ImageIcon(getClass().getResource("/image/logo_kecil.png")));
         Judul_label.setText("Logo Aplikasi");
         getContentPane().add(Judul_label);
@@ -94,7 +86,8 @@ public class Beranda_User extends javax.swing.JFrame {
         label_user.setBounds(290, 0, 105, 28);
         getContentPane().add(label_user);
         
-//Panel Daftar
+        
+//Panel Daftar Barang
         daftar = new DaftarBarang(query);
         javax.swing.GroupLayout Layout_jPanel_Daftar = new javax.swing.GroupLayout(panel_ListBarang);
         panel_ListBarang.setLayout(Layout_jPanel_Daftar);
@@ -106,7 +99,7 @@ public class Beranda_User extends javax.swing.JFrame {
         );
         getContentPane().add(panel_ListBarang);
         panel_ListBarang.setBounds(290, 50, 740, screenwidth/12*5);
-//Panel Daftar
+        
         
 //        Tombol_beranda.setBackground(bg_tombol);
         Tombol_logout.setBackground(bg_tombol);
@@ -160,17 +153,18 @@ public class Beranda_User extends javax.swing.JFrame {
 //Latar Belakang
 
 //Mouse Listener
-        tbl_Tutup.addMouseListener(new MouseAdapter() {
+        tombol_Tutup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                close1MouseClicked(evt);
+                Login A = new Login();
+                dispose();
             }
         });
         
         Tombol_logout.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
-                new Login_User().setVisible(true);
+                new Login().setVisible(true);
                 dispose();
             }            
         });
@@ -204,63 +198,15 @@ public class Beranda_User extends javax.swing.JFrame {
 //Fungsi Aksi
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
-// TODO add your handling code here:
-        Login_User A = new Login_User();
+        
+        Login A = new Login();
     }                                  
 
     private void close1MouseClicked(java.awt.event.MouseEvent evt) {
-// TODO add your handling code here:
-        Login_User A = new Login_User();
-        this.dispose();
     }                                   
     
     private void Tombol_berandaAction() {
         this.user=id_pengguna;
     }
     
-    private void Tombol_KehilangankuAction(ActionEvent evt){
-        this.query="SELECT * FROM barang JOIN pengguna WHERE barang.id_pengguna = pengguna.id_pengguna AND barang.id_pengguna="+this.user+" order by waktu desc";
-    }
-    
-    private void Tombol_KutemukanAction(ActionEvent evt) {
-        System.out.println("Belom Di Isi");
-    }
-    
-    private void Tombol_TambahAction(ActionEvent evt) {
-        new Tambah_Barang().setVisible(true);
-    }
-    //Fungsi Aksi
-    
-
-    /*
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Beranda_Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-
-        
-        /* Membuat dan Menampilkan Form */
-        java.awt.EventQueue.invokeLater(new RunnableImpl());
-    }   
-
-    private static class RunnableImpl implements Runnable {
-
-        public RunnableImpl() {
-        }
-
-        @Override
-        public void run() {
-            new Beranda_User().setVisible(true);
-        }
-    }
 }

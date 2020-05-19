@@ -1,6 +1,7 @@
 
 package daftarBarang;
 
+import javax.swing.*;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,20 +10,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import static main.KoneksiDB.koneksi;
 
 public final class DaftarBarang extends javax.swing.JPanel{
     DefaultTableModel model;
+    Connection koneksi;
     
     private JPanel body;
     private JScrollPane bodyscroll;
     private JTable tabel;
+    
     String [] judul ={"Nama Barang","penemu","keterangan","Waktu","Status"};
     Object [][] ListBarang;
+    String [] ListId;
     int panjangList,iterasi_list=0;
     String url ="jdbc:mysql://localhost/sikeb";
     String user="root";
@@ -34,7 +34,8 @@ public final class DaftarBarang extends javax.swing.JPanel{
     public DaftarBarang(){
         cari_panjangList();
         ListBarang = new Object[panjangList][5];
-        isiListBarangl();
+        ListId = new String[panjangList];
+        isiMatriksList();
         initComponents();
     }
     
@@ -42,11 +43,11 @@ public final class DaftarBarang extends javax.swing.JPanel{
         this.query=query;
         cari_panjangList();
         ListBarang = new Object[panjangList][5];
-        isiListBarangl();
+        ListId = new String[panjangList];
+        isiMatriksList();
         initComponents();
     }
     
-            
     public void cari_panjangList(){
         try {
             koneksi = DriverManager.getConnection("jdbc:mysql://localhost/sikeb","root","");
@@ -66,7 +67,7 @@ public final class DaftarBarang extends javax.swing.JPanel{
         }
     }
     
-    public void isiListBarangl() {
+    public void isiMatriksList() {
         
         try {koneksi = DriverManager.getConnection("jdbc:mysql://localhost/sikeb","root","");
             ResultSet rs = koneksi.createStatement().executeQuery(query);
@@ -79,6 +80,7 @@ public final class DaftarBarang extends javax.swing.JPanel{
                 }else{
                     StatusBarang ="Hilang";
                 }
+                    ListId[iterasi_list-1]=rs.getString("nomor");
                     ListBarang[iterasi_list-1][0]=rs.getString("nama_barang");
                     ListBarang[iterasi_list-1][1]=rs.getString("nama_pengguna");
                     ListBarang[iterasi_list-1][2]=rs.getString("keterangan");
@@ -90,20 +92,39 @@ public final class DaftarBarang extends javax.swing.JPanel{
         }
     }
     
+    public void ListDipilih() {
+        
+        try {koneksi = DriverManager.getConnection("jdbc:mysql://localhost/sikeb","root","");
+            ResultSet rs = koneksi.createStatement().executeQuery(query);
+            
+            while(rs.next()){
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DaftarBarang.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     
     private void initComponents(){
         body = new JPanel();
         bodyscroll = new JScrollPane();
         tabel = new JTable();
         
-        //coba
         tabel.setModel(new javax.swing.table.DefaultTableModel(
             ListBarang,
                 judul
         ));
-        
-        
-        
+        tabel.addMouseListener(new java.awt.event.MouseAdapter() {
+    @Override
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        int row = tabel.rowAtPoint(evt.getPoint());
+        int col = tabel.columnAtPoint(evt.getPoint());
+        if (row >= 0 && col >= 0) {
+            new DetailBarang(ListId[row]).setVisible(true);
+        }
+    }
+});
         java.awt.GridLayout bodyLayout;
         bodyLayout = new java.awt.GridLayout();
         bodyLayout.setColumns(1);
@@ -133,17 +154,4 @@ public final class DaftarBarang extends javax.swing.JPanel{
         
         
     }
-    
-    
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        DaftarBarang daftar = new DaftarBarang();
-        frame.setPreferredSize(new java.awt.Dimension(1080, 720));
-        frame.setMinimumSize(new java.awt.Dimension(1080, 720));
-        
-        frame.add(daftar);
-        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
-    
 }
